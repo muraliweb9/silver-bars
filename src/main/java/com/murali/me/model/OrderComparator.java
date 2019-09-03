@@ -11,10 +11,10 @@ public class OrderComparator implements Comparator<OrderKey>{
 		int orderTypeCompare = o1.getOrderType().compareTo(o2.getOrderType());
 		if (orderTypeCompare == 0) {
 			if (o1.getOrderType() == OrderType.BUY) {
-				return o1.getPrice().compareTo(o2.getPrice());
+				return o2.getPrice().compareTo(o1.getPrice());
 			}
 			if (o1.getOrderType() == OrderType.SELL) {
-				return o2.getPrice().compareTo(o1.getPrice());
+				return o1.getPrice().compareTo(o2.getPrice());
 			} 
 		}
 		return orderTypeCompare;

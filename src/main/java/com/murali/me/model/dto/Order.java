@@ -1,7 +1,6 @@
 package com.murali.me.model.dto;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 import lombok.Builder;
 import lombok.Data;

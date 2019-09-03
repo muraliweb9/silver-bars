@@ -1,11 +1,13 @@
 package com.murali.me;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -217,7 +219,7 @@ public class SilverBarsTradingAppTest {
 
 		assertEquals(3, orderSummary.size());
 		
-		orderSummary.entrySet().stream().forEach(e -> System.out.println(e.getKey() + "=" + e.getValue()));
+		//orderSummary.entrySet().stream().forEach(e -> System.out.println(e.getKey() + "=" + e.getValue()));
 
 	}
 	
@@ -261,10 +263,65 @@ public class SilverBarsTradingAppTest {
 		Map<OrderKey, BigDecimal> orderSummary = oms.summaryOfOrders();
 
 		assertEquals(6, orderSummary.size());
+
+		/*
+		OrderKey(orderType=BUY, price=310.00)=1.2
+		OrderKey(orderType=BUY, price=307.00)=1.5
+		OrderKey(orderType=BUY, price=306.00)=5.5
+		OrderKey(orderType=SELL, price=306.00)=5.5
+		OrderKey(orderType=SELL, price=307.00)=1.5
+		OrderKey(orderType=SELL, price=310.00)=1.2
+		*/
+			
+
+		OrderKey orderKey;
+		BigDecimal orderQuantity;
+		Entry<OrderKey, BigDecimal> entry;
 		
-		orderSummary.entrySet().stream().forEach(e -> System.out.println(e.getKey() + "=" + e.getValue()));
+		Iterator<Map.Entry<OrderKey,BigDecimal>> iter = orderSummary.entrySet().iterator();
+		
+		entry = iter.next();
+		orderKey = entry.getKey();
+		orderQuantity = entry.getValue();
+		assertAggregation(orderKey, orderQuantity, OrderType.BUY, new BigDecimal("310.00"), new BigDecimal("1.2"));
+		
+		entry = iter.next();
+		orderKey = entry.getKey();
+		orderQuantity = entry.getValue();
+		assertAggregation(orderKey, orderQuantity, OrderType.BUY, new BigDecimal("307.00"), new BigDecimal("1.5"));
+		
+		entry = iter.next();
+		orderKey = entry.getKey();
+		orderQuantity = entry.getValue();
+		assertAggregation(orderKey, orderQuantity, OrderType.BUY, new BigDecimal("306.00"), new BigDecimal("5.5"));
+
+		entry = iter.next();
+		orderKey = entry.getKey();
+		orderQuantity = entry.getValue();
+		assertAggregation(orderKey, orderQuantity, OrderType.SELL, new BigDecimal("306.00"), new BigDecimal("5.5"));
+		
+		entry = iter.next();
+		orderKey = entry.getKey();
+		orderQuantity = entry.getValue();
+		assertAggregation(orderKey, orderQuantity, OrderType.SELL, new BigDecimal("307.00"), new BigDecimal("1.5"));
+		
+		entry = iter.next();
+		orderKey = entry.getKey();
+		orderQuantity = entry.getValue();
+		assertAggregation(orderKey, orderQuantity, OrderType.SELL, new BigDecimal("310.00"), new BigDecimal("1.2"));
+
+		//orderSummary.entrySet().stream().forEach(e -> System.out.println(e.getKey() + "=" + e.getValue()));
 
 	}
 
-	
+	private void assertAggregation(OrderKey key, BigDecimal val, OrderType expectedOrderType, 
+			BigDecimal expectedPrice,
+			BigDecimal expectedQuantity) {
+		
+		assertEquals(key.getOrderType(), expectedOrderType);
+		assertEquals(key.getPrice(), expectedPrice);
+		assertEquals(val, expectedQuantity);
+		
+		
+	}
 }
