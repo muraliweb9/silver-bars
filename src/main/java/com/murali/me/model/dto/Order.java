@@ -5,6 +5,7 @@ import java.math.BigInteger;
 
 import com.murali.me.model.OrderType;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -14,9 +15,9 @@ import lombok.Data;
  *
  */
 @Data
+@Builder
 public class Order {
 	
-	BigInteger orderId;
 	String userId;
 	BigDecimal quantity;
 	BigDecimal price;
