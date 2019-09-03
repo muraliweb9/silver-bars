@@ -15,9 +15,9 @@ import lombok.Data;
 @Builder
 public class Order {
 	
-	String userId;
-	BigDecimal quantity;
-	BigDecimal price;
-	OrderType orderType;
+	private String userId;
+	private BigDecimal quantity;
+	private BigDecimal price;
+	private OrderType orderType;
 
 }
