@@ -14,6 +14,12 @@ import com.murali.me.model.OrderComparator;
 import com.murali.me.model.OrderKey;
 import com.murali.me.model.dto.Order;
 
+/**
+ * Order management service implementation
+ * 
+ * @author murali
+ *
+ */
 public class OrderManagementServiceImpl implements OrderManagementService {
 
 	private BigInteger lastOrderId;

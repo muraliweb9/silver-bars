@@ -4,6 +4,12 @@ import java.util.Comparator;
 
 import com.murali.me.model.dto.OrderType;
 
+/**
+ * For sorting BUY/SELL orders based on best price
+ *  
+ * @author murali
+ *
+ */
 public class OrderComparator implements Comparator<OrderKey>{
 
 	@Override

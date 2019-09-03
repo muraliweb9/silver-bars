@@ -8,6 +8,12 @@ import com.murali.me.model.dto.OrderType;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * Natural key for order aggregation
+ * 
+ * @author murali
+ *
+ */
 @Data
 @Builder
 public class OrderKey {

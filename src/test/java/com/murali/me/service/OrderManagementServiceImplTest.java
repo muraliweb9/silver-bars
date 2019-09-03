@@ -1,4 +1,4 @@
-package com.murali.me;
+package com.murali.me.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
@@ -22,13 +23,18 @@ import com.murali.me.service.OrderManagementService;
 import com.murali.me.service.OrderManagementServiceImpl;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SilverBarsTradingAppTest {
+public class OrderManagementServiceImplTest {
 
 	private static OrderManagementService oms;
 	
 	@BeforeAll
     public static void beforeClass() {
 		oms = new OrderManagementServiceImpl();
+    }
+	
+	@AfterAll
+    public static void afterClass() {
+		oms = null;
     }
 	
 	@Test
@@ -49,14 +55,47 @@ public class SilverBarsTradingAppTest {
 			}
 		);
 	}
-		
+	
 	@Test
 	@org.junit.jupiter.api.Order(3)
+	public void testMissingBuySellIndOrder() throws InvalidOrderException {
+		assertThrows(InvalidOrderException.class, () -> {
+			oms.placeOrder(
+					Order.builder()
+						.userId("user-1")
+						.build()
+					);
+			}
+		);
+
+
+	}
+
+		
+	@Test
+	@org.junit.jupiter.api.Order(4)
+	public void testNullQuantityOrder() throws InvalidOrderException {
+		assertThrows(InvalidOrderException.class, () -> {
+			oms.placeOrder(
+					Order.builder()
+						.userId("user-1")
+						.orderType(OrderType.BUY)
+						.quantity(null)
+						.build()
+					);
+			}
+		);
+
+	}
+	
+	@Test
+	@org.junit.jupiter.api.Order(5)
 	public void testInvalidQuantityOrder() throws InvalidOrderException {
 		assertThrows(InvalidOrderException.class, () -> {
 			oms.placeOrder(
 					Order.builder()
 						.userId("user-1")
+						.orderType(OrderType.BUY)
 						.quantity(BigDecimal.valueOf(-1))
 						.build()
 					);
@@ -66,12 +105,32 @@ public class SilverBarsTradingAppTest {
 	}
 	
 	@Test
-	@org.junit.jupiter.api.Order(4)
+	@org.junit.jupiter.api.Order(6)
+	public void testNullPriceOrder() throws InvalidOrderException {
+		assertThrows(InvalidOrderException.class, () -> {
+			oms.placeOrder(
+					Order.builder()
+						.userId("user-1")
+						.orderType(OrderType.BUY)
+						.quantity(BigDecimal.valueOf(100))
+						.price(null)
+						.build()
+					);
+			}
+		);
+
+		
+
+	}
+	
+	@Test
+	@org.junit.jupiter.api.Order(7)
 	public void testInvalidPriceOrder() throws InvalidOrderException {
 		assertThrows(InvalidOrderException.class, () -> {
 			oms.placeOrder(
 					Order.builder()
 						.userId("user-1")
+						.orderType(OrderType.BUY)
 						.quantity(BigDecimal.valueOf(100))
 						.price(new BigDecimal("-100.35"))
 						.build()
@@ -84,24 +143,7 @@ public class SilverBarsTradingAppTest {
 	}
 	
 	@Test
-	@org.junit.jupiter.api.Order(5)
-	public void testMissingBuySellIndOrder() throws InvalidOrderException {
-		assertThrows(InvalidOrderException.class, () -> {
-			oms.placeOrder(
-					Order.builder()
-						.userId("user-1")
-						.quantity(BigDecimal.valueOf(100))
-						.price(new BigDecimal("100.35"))
-						.build()
-					);
-			}
-		);
-
-
-	}
-	
-	@Test
-	@org.junit.jupiter.api.Order(6)	
+	@org.junit.jupiter.api.Order(8)	
 	public void testValidOrder() throws InvalidOrderException {
 		BigInteger orderId = oms.placeOrder(
 				Order.builder()
@@ -115,25 +157,25 @@ public class SilverBarsTradingAppTest {
 	}
 	
 	@Test
-	@org.junit.jupiter.api.Order(7)
+	@org.junit.jupiter.api.Order(9)
 	public void testCancelNullOrder() throws InvalidOrderException {
 		assertThrows(InvalidOrderException.class, () -> {oms.cancelOrder(null);});
 	}
 	
 	@Test
-	@org.junit.jupiter.api.Order(8)
+	@org.junit.jupiter.api.Order(10)
 	public void testCancelInvalidOrder() throws InvalidOrderException {
 		assertThrows(InvalidOrderException.class, () -> {oms.cancelOrder(new BigInteger("2"));});
 	}
 
 	@Test
-	@org.junit.jupiter.api.Order(9)
+	@org.junit.jupiter.api.Order(11)
 	public void testCancelValidOrder() throws InvalidOrderException {
 		oms.cancelOrder(new BigInteger("1"));
 	}
 	
 	@Test
-	@org.junit.jupiter.api.Order(10)
+	@org.junit.jupiter.api.Order(12)
 	public void testCancelTwoOrders() throws InvalidOrderException {
 		BigInteger firstOrderId = oms.placeOrder(
 				Order.builder()
@@ -174,7 +216,7 @@ public class SilverBarsTradingAppTest {
 		
 	*/
 	@Test
-	@org.junit.jupiter.api.Order(11)
+	@org.junit.jupiter.api.Order(13)
 	public void testOrderAggregationOrders() throws InvalidOrderException {
 		BigInteger firstOrderId = oms.placeOrder(
 				Order.builder()
@@ -224,7 +266,7 @@ public class SilverBarsTradingAppTest {
 	}
 	
 	@Test
-	@org.junit.jupiter.api.Order(12)
+	@org.junit.jupiter.api.Order(14)
 	public void testOrderAggregationAndSortingOrders() throws InvalidOrderException {
 		BigInteger fifthOrderId = oms.placeOrder(
 				Order.builder()
