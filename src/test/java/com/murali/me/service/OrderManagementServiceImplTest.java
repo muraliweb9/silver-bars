@@ -71,41 +71,8 @@ public class OrderManagementServiceImplTest {
 
 	}
 
-		
 	@Test
 	@org.junit.jupiter.api.Order(4)
-	public void testNullQuantityOrder() throws InvalidOrderException {
-		assertThrows(InvalidOrderException.class, () -> {
-			oms.placeOrder(
-					Order.builder()
-						.userId("user-1")
-						.orderType(OrderType.BUY)
-						.quantity(null)
-						.build()
-					);
-			}
-		);
-
-	}
-	
-	@Test
-	@org.junit.jupiter.api.Order(5)
-	public void testInvalidQuantityOrder() throws InvalidOrderException {
-		assertThrows(InvalidOrderException.class, () -> {
-			oms.placeOrder(
-					Order.builder()
-						.userId("user-1")
-						.orderType(OrderType.BUY)
-						.quantity(BigDecimal.valueOf(-1))
-						.build()
-					);
-			}
-		);
-
-	}
-	
-	@Test
-	@org.junit.jupiter.api.Order(6)
 	public void testNullPriceOrder() throws InvalidOrderException {
 		assertThrows(InvalidOrderException.class, () -> {
 			oms.placeOrder(
@@ -124,7 +91,7 @@ public class OrderManagementServiceImplTest {
 	}
 	
 	@Test
-	@org.junit.jupiter.api.Order(7)
+	@org.junit.jupiter.api.Order(5)
 	public void testInvalidPriceOrder() throws InvalidOrderException {
 		assertThrows(InvalidOrderException.class, () -> {
 			oms.placeOrder(
@@ -141,6 +108,40 @@ public class OrderManagementServiceImplTest {
 		
 
 	}
+
+		
+	@Test
+	@org.junit.jupiter.api.Order(6)
+	public void testNullQuantityOrder() throws InvalidOrderException {
+		assertThrows(InvalidOrderException.class, () -> {
+			oms.placeOrder(
+					Order.builder()
+						.userId("user-1")
+						.orderType(OrderType.BUY)
+						.quantity(null)
+						.build()
+					);
+			}
+		);
+
+	}
+	
+	@Test
+	@org.junit.jupiter.api.Order(7)
+	public void testInvalidQuantityOrder() throws InvalidOrderException {
+		assertThrows(InvalidOrderException.class, () -> {
+			oms.placeOrder(
+					Order.builder()
+						.userId("user-1")
+						.orderType(OrderType.BUY)
+						.quantity(BigDecimal.valueOf(-1))
+						.build()
+					);
+			}
+		);
+
+	}
+	
 	
 	@Test
 	@org.junit.jupiter.api.Order(8)	
