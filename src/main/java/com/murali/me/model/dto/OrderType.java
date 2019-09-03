@@ -1,4 +1,4 @@
-package com.murali.me.model;
+package com.murali.me.model.dto;
 
 /**
  * Defines the types of orders handled by the system

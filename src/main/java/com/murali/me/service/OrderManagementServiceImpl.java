@@ -9,6 +9,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.murali.me.model.OrderKey;
 import com.murali.me.model.dto.Order;
 
 public class OrderManagementServiceImpl implements OrderManagementService {
@@ -35,14 +36,24 @@ public class OrderManagementServiceImpl implements OrderManagementService {
 			throw new InvalidOrderException("Null orderId");
 		}
 		if (!registeredOrders.containsKey(orderId)) {
-			throw new InvalidOrderException("Invalid orderId");
+			throw new InvalidOrderException(String.format("Invalid orderId: %s", orderId.toString()));
 		}
 		registeredOrders.remove(orderId);
 	}
 	
 	@Override
-	public void summaryOfOrders() throws InvalidOrderException {
+	public Map<OrderKey, BigDecimal> summaryOfOrders() throws InvalidOrderException {
+		Map<OrderKey, BigDecimal> orderSummary = new HashMap<>();
 		
+		for (Order order : registeredOrders.values()) {
+			OrderKey key = OrderKey.from(order);
+			if (!orderSummary.containsKey(key)) {
+				orderSummary.put(key, BigDecimal.ZERO);
+			}
+			orderSummary.put(key, orderSummary.get(key).add(order.getQuantity()));
+		}
+		
+		return orderSummary;
 	}
 	
 	private void validateOrder(Order order) throws InvalidOrderException {

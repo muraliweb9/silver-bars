@@ -1,7 +1,10 @@
 package com.murali.me.service;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Map;
 
+import com.murali.me.model.OrderKey;
 import com.murali.me.model.dto.Order;
 
 /**
@@ -16,7 +19,7 @@ public interface OrderManagementService {
 	
 	void cancelOrder(BigInteger orderId) throws InvalidOrderException;
 	
-	void summaryOfOrders() throws InvalidOrderException;
+	Map<OrderKey, BigDecimal> summaryOfOrders() throws InvalidOrderException;
 
 	
 }
