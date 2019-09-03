@@ -8,7 +8,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
+import com.murali.me.model.OrderComparator;
 import com.murali.me.model.OrderKey;
 import com.murali.me.model.dto.Order;
 
@@ -43,7 +45,7 @@ public class OrderManagementServiceImpl implements OrderManagementService {
 	
 	@Override
 	public Map<OrderKey, BigDecimal> summaryOfOrders() throws InvalidOrderException {
-		Map<OrderKey, BigDecimal> orderSummary = new HashMap<>();
+		Map<OrderKey, BigDecimal> orderSummary = new TreeMap<>(new OrderComparator());
 		
 		for (Order order : registeredOrders.values()) {
 			OrderKey key = OrderKey.from(order);

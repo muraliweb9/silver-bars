@@ -159,6 +159,18 @@ public class SilverBarsTradingAppTest {
 
 	}
 	
+	/* Orders
+	a) SELL: 3.5 kg for £306 [user1]
+	b) SELL: 1.2 kg for £310 [user2]
+	c) SELL: 1.5 kg for £307 [user3]
+	d) SELL: 2.0 kg for £306 [user4]
+	
+	Our ‘Live Order Board’ should provide us the following summary information:
+		- 5.5 kg for £306 // order a + order d
+		- 1.5 kg for £307 // order c
+		- 1.2 kg for £310 // order b
+		
+	*/
 	@Test
 	@org.junit.jupiter.api.Order(11)
 	public void testOrderAggregationOrders() throws InvalidOrderException {
@@ -208,10 +220,51 @@ public class SilverBarsTradingAppTest {
 		orderSummary.entrySet().stream().forEach(e -> System.out.println(e.getKey() + "=" + e.getValue()));
 
 	}
-	/*
-	a) SELL: 3.5 kg for £306 [user1]
-			- b) SELL: 1.2 kg for £310 [user2]
-			- c) SELL: 1.5 kg for £307 [user3]
-			- d) SELL: 2.0 kg for £306 [user4]
-*/
+	
+	@Test
+	@org.junit.jupiter.api.Order(12)
+	public void testOrderAggregationAndSortingOrders() throws InvalidOrderException {
+		BigInteger fifthOrderId = oms.placeOrder(
+				Order.builder()
+					.userId("user-5")
+					.quantity(new BigDecimal("3.5"))
+					.price(new BigDecimal("306.00"))
+					.orderType(OrderType.BUY)
+					.build()
+				);
+		BigInteger sixthOrderId = oms.placeOrder(
+				Order.builder()
+					.userId("user-6")
+					.quantity(new BigDecimal("1.2"))
+					.price(new BigDecimal("310.00"))
+					.orderType(OrderType.BUY)
+					.build()
+				);
+		
+		BigInteger seventhOrderId = oms.placeOrder(
+				Order.builder()
+					.userId("user-7")
+					.quantity(new BigDecimal("1.5"))
+					.price(new BigDecimal("307.00"))
+					.orderType(OrderType.BUY)
+					.build()
+				);
+		BigInteger eigthOrderId = oms.placeOrder(
+				Order.builder()
+					.userId("user-8")
+					.quantity(new BigDecimal("2.0"))
+					.price(new BigDecimal("306.00"))
+					.orderType(OrderType.BUY)
+					.build()
+				);
+				
+		Map<OrderKey, BigDecimal> orderSummary = oms.summaryOfOrders();
+
+		assertEquals(6, orderSummary.size());
+		
+		orderSummary.entrySet().stream().forEach(e -> System.out.println(e.getKey() + "=" + e.getValue()));
+
+	}
+
+	
 }

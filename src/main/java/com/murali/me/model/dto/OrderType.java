@@ -8,6 +8,5 @@ package com.murali.me.model.dto;
  */
 public enum OrderType {
 	BUY,
-	SELL,
-	TRADE;
+	SELL;
 }
