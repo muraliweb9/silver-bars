@@ -2,6 +2,7 @@
 
 Download code from [GitHub - silver-bars](https://github.com/muraliweb9/silver-bars/)
 
++ ObjectAid class diagram is available at: silver-bars/src/main/doc/class-diagram.ucls
 + The external interface is com.murali.me.service.OrderManagementService
 + The external data transfer object Pojo is com.murali.me.model.dto.Order
 + Extensive use of Lombok to remove boiler plate code
