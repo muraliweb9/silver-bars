@@ -7,12 +7,15 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import com.murali.me.model.OrderComparator;
 import com.murali.me.model.OrderKey;
 import com.murali.me.model.dto.Order;
+import com.murali.me.model.dto.OrderType;
 
 /**
  * Order management service implementation
@@ -51,9 +54,14 @@ public class OrderManagementServiceImpl implements OrderManagementService {
 	
 	@Override
 	public Map<OrderKey, BigDecimal> summaryOfOrders() throws InvalidOrderException {
+		return summaryOfOrders(null);
+	}
+	
+	@Override
+	public Map<OrderKey, BigDecimal> summaryOfOrders(OrderType orderType) throws InvalidOrderException {
 		Map<OrderKey, BigDecimal> orderSummary = new TreeMap<>(new OrderComparator());
 		
-		for (Order order : registeredOrders.values()) {
+		for (Order order : getOrders(orderType)) {
 			OrderKey key = OrderKey.from(order);
 			if (!orderSummary.containsKey(key)) {
 				orderSummary.put(key, BigDecimal.ZERO);
@@ -85,6 +93,15 @@ public class OrderManagementServiceImpl implements OrderManagementService {
 		if (val.signum() != 1) {
 			throw new InvalidOrderException("Non positive number value");
 		}
+	}
+	
+	private List<Order> getOrders(OrderType orderType) {
+		return registeredOrders
+			.values()
+			.stream()
+			.filter(o -> (orderType == null || o.getOrderType() == orderType))
+			.collect(Collectors.toList());
+		
 	}
 
 	

@@ -85,9 +85,6 @@ public class OrderManagementServiceImplTest {
 					);
 			}
 		);
-
-		
-
 	}
 	
 	@Test
@@ -104,9 +101,6 @@ public class OrderManagementServiceImplTest {
 					);
 			}
 		);
-
-		
-
 	}
 
 		
@@ -356,6 +350,84 @@ public class OrderManagementServiceImplTest {
 		//orderSummary.entrySet().stream().forEach(e -> System.out.println(e.getKey() + "=" + e.getValue()));
 
 	}
+
+	@Test
+	@org.junit.jupiter.api.Order(15)
+	public void testOrderAggregationAndSortingBuyOrders() throws InvalidOrderException {
+				
+		Map<OrderKey, BigDecimal> orderSummary = oms.summaryOfOrders(OrderType.BUY);
+
+		assertEquals(3, orderSummary.size());
+
+		/*
+		OrderKey(orderType=BUY, price=310.00)=1.2
+		OrderKey(orderType=BUY, price=307.00)=1.5
+		OrderKey(orderType=BUY, price=306.00)=5.5
+		*/
+			
+		OrderKey orderKey;
+		BigDecimal orderQuantity;
+		Entry<OrderKey, BigDecimal> entry;
+		
+		Iterator<Map.Entry<OrderKey,BigDecimal>> iter = orderSummary.entrySet().iterator();
+		
+		entry = iter.next();
+		orderKey = entry.getKey();
+		orderQuantity = entry.getValue();
+		assertAggregation(orderKey, orderQuantity, OrderType.BUY, new BigDecimal("310.00"), new BigDecimal("1.2"));
+		
+		entry = iter.next();
+		orderKey = entry.getKey();
+		orderQuantity = entry.getValue();
+		assertAggregation(orderKey, orderQuantity, OrderType.BUY, new BigDecimal("307.00"), new BigDecimal("1.5"));
+		
+		entry = iter.next();
+		orderKey = entry.getKey();
+		orderQuantity = entry.getValue();
+		assertAggregation(orderKey, orderQuantity, OrderType.BUY, new BigDecimal("306.00"), new BigDecimal("5.5"));
+
+	}
+	
+	@Test
+	@org.junit.jupiter.api.Order(16)
+	public void testOrderAggregationAndSortingSellOrders() throws InvalidOrderException {
+				
+		Map<OrderKey, BigDecimal> orderSummary = oms.summaryOfOrders(OrderType.SELL);
+
+		assertEquals(3, orderSummary.size());
+
+		/*
+		OrderKey(orderType=SELL, price=306.00)=5.5
+		OrderKey(orderType=SELL, price=307.00)=1.5
+		OrderKey(orderType=SELL, price=310.00)=1.2
+		*/
+			
+
+		OrderKey orderKey;
+		BigDecimal orderQuantity;
+		Entry<OrderKey, BigDecimal> entry;
+		
+		Iterator<Map.Entry<OrderKey,BigDecimal>> iter = orderSummary.entrySet().iterator();
+		
+		entry = iter.next();
+		orderKey = entry.getKey();
+		orderQuantity = entry.getValue();
+		assertAggregation(orderKey, orderQuantity, OrderType.SELL, new BigDecimal("306.00"), new BigDecimal("5.5"));
+		
+		entry = iter.next();
+		orderKey = entry.getKey();
+		orderQuantity = entry.getValue();
+		assertAggregation(orderKey, orderQuantity, OrderType.SELL, new BigDecimal("307.00"), new BigDecimal("1.5"));
+		
+		entry = iter.next();
+		orderKey = entry.getKey();
+		orderQuantity = entry.getValue();
+		assertAggregation(orderKey, orderQuantity, OrderType.SELL, new BigDecimal("310.00"), new BigDecimal("1.2"));
+
+		//orderSummary.entrySet().stream().forEach(e -> System.out.println(e.getKey() + "=" + e.getValue()));
+
+	}
+
 
 	private void assertAggregation(OrderKey key, BigDecimal val, OrderType expectedOrderType, 
 			BigDecimal expectedPrice,
